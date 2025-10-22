@@ -1,7 +1,5 @@
-// Базовый URL для доступа к данным
 const API_BASE_URL = '/Data/posts.json';
 
-// Вспомогательная функция для чтения данных из JSON файла
 const readData = async () => {
   try {
     const response = await fetch(API_BASE_URL);
@@ -16,12 +14,8 @@ const readData = async () => {
   }
 };
 
-// Вспомогательная функция для записи данных в JSON файл
-// В реальном приложении это бы делалось через бэкенд,
-// но для демонстрации мы будем использовать localStorage как временное хранилище
 const writeData = async (posts) => {
   try {
-    // Сохраняем в localStorage для имитации сохранения на сервере
     localStorage.setItem('posts', JSON.stringify(posts));
     return true;
   } catch (error) {
@@ -30,16 +24,13 @@ const writeData = async (posts) => {
   }
 };
 
-// GET - получение всех постов
 export const getPosts = async () => {
   try {
-    // Пробуем получить данные из localStorage (обновленные)
     const localPosts = localStorage.getItem('posts');
     if (localPosts) {
       return JSON.parse(localPosts);
     }
     
-    // Если в localStorage нет данных, загружаем из JSON файла
     const posts = await readData();
     return posts;
   } catch (error) {
@@ -47,7 +38,6 @@ export const getPosts = async () => {
   }
 };
 
-// GET - получение одного поста по ID
 export const getPost = async (id) => {
   try {
     const posts = await getPosts();
@@ -61,12 +51,10 @@ export const getPost = async (id) => {
   }
 };
 
-// POST - создание нового поста
 export const createPost = async (postData) => {
   try {
     const posts = await getPosts();
     
-    // Генерируем новый ID
     const newId = posts.length > 0 ? Math.max(...posts.map(p => p.id)) + 1 : 1;
     
     const newPost = {
@@ -74,10 +62,8 @@ export const createPost = async (postData) => {
       ...postData
     };
     
-    // Добавляем новый пост
     const updatedPosts = [...posts, newPost];
     
-    // Сохраняем обновленные данные
     await writeData(updatedPosts);
     
     return newPost;
@@ -86,7 +72,6 @@ export const createPost = async (postData) => {
   }
 };
 
-// PUT - полное обновление поста
 export const updatePost = async (id, postData) => {
   try {
     const posts = await getPosts();
@@ -96,17 +81,14 @@ export const updatePost = async (id, postData) => {
       throw new Error(`Пост с ID ${id} не найден`);
     }
     
-    // Создаем обновленный пост
     const updatedPost = {
       id: parseInt(id),
       ...postData
     };
     
-    // Обновляем массив постов
     const updatedPosts = [...posts];
     updatedPosts[postIndex] = updatedPost;
     
-    // Сохраняем обновленные данные
     await writeData(updatedPosts);
     
     return updatedPost;
@@ -115,7 +97,6 @@ export const updatePost = async (id, postData) => {
   }
 };
 
-// PATCH - частичное обновление поста
 export const patchPost = async (id, postData) => {
   try {
     const posts = await getPosts();
@@ -125,18 +106,15 @@ export const patchPost = async (id, postData) => {
       throw new Error(`Пост с ID ${id} не найден`);
     }
     
-    // Частично обновляем пост
     const updatedPost = {
       ...posts[postIndex],
       ...postData,
-      id: parseInt(id) // Сохраняем оригинальный ID
+      id: parseInt(id)
     };
     
-    // Обновляем массив постов
     const updatedPosts = [...posts];
     updatedPosts[postIndex] = updatedPost;
     
-    // Сохраняем обновленные данные
     await writeData(updatedPosts);
     
     return updatedPost;
@@ -145,7 +123,6 @@ export const patchPost = async (id, postData) => {
   }
 };
 
-// DELETE - удаление поста
 export const deletePost = async (id) => {
   try {
     const posts = await getPosts();
@@ -155,10 +132,8 @@ export const deletePost = async (id) => {
       throw new Error(`Пост с ID ${id} не найден`);
     }
     
-    // Удаляем пост из массива
     const updatedPosts = posts.filter(post => post.id !== parseInt(id));
     
-    // Сохраняем обновленные данные
     await writeData(updatedPosts);
     
     return id;
@@ -167,7 +142,6 @@ export const deletePost = async (id) => {
   }
 };
 
-// Сброс данных к исходным из JSON файла
 export const resetPosts = async () => {
   try {
     localStorage.removeItem('posts');
