@@ -18,7 +18,6 @@ function App() {
   const [editingPost, setEditingPost] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  // GET - Загрузка постов при монтировании компонента
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -37,7 +36,6 @@ function App() {
     }
   };
 
-  // POST - Создание нового поста
   const handleCreatePost = async (postData) => {
     setLoading(true);
     setError(null);
@@ -54,7 +52,6 @@ function App() {
     }
   };
 
-  // PUT - Обновление поста
   const handleUpdatePost = async (postData) => {
     if (!editingPost) return;
 
@@ -75,7 +72,6 @@ function App() {
     }
   };
 
-  // DELETE - Удаление поста
   const handleDeletePost = async (postId) => {
     setError(null);
     try {
@@ -88,7 +84,6 @@ function App() {
     }
   };
 
-  // Сброс данных к исходным
   const handleResetData = async () => {
     if (window.confirm('Вы уверены, что хотите сбросить все изменения?')) {
       setLoading(true);

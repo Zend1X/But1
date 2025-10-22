@@ -145,7 +145,6 @@
   font-size: 0.9em;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
   .App-main {
     padding: 15px;

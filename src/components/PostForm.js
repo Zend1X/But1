@@ -17,7 +17,6 @@ const PostForm = ({ onSubmit, initialData = null, onCancel }) => {
       [name]: value
     }));
     
-    // Очищаем ошибки при изменении
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
